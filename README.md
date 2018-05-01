@@ -1,2 +1,0 @@
-# crosswords
-Crossword project
