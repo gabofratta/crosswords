@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+	<style>
+		table, th, td {
+    		border: 1px solid black;
+    		border-collapse: collapse;
+		}
+
+		td {
+			min-width: 50px;
+			height: 50px;
+			background-color: black;
+		}
+
+		.solved {
+			background-color: lightgreen;
+		}
+
+		.label {
+			z-index: 1000;
+			position: absolute;
+			margin-left: 3px;
+			margin-top: 1px;
+		}
+
+		input[type="text"] {
+			height: 48px;
+			width: 48px;
+			font-size: 24px;
+			text-align: center;
+		}
+	</style>
+
+	<script>
+		// map of words with key, which should appear in corresponding inputs
+		var word_map = {"w_1" : "test",
+						"w_2" : "temp",
+						"w_3" : "see"};
+
+		// on page load
+	    onload = function () {
+	    	// all inputs
+	        var inputs = document.querySelectorAll("input[type=text]");
+
+	        // for each input
+	        for (var i = 0; i < inputs.length; i++) {
+	        	// add event listener for text input
+	        	inputs[i].addEventListener('input', function(event) {
+	        		// word indices array
+	        		var word_indices = this.getAttribute("data-word").split(" ");
+
+	        		// iterate over words this input belongs to
+	        		for (var k = 0; k < word_indices.length; k++) {
+						// get all of the inputs that form this word
+						var word_index = word_indices[k];
+						var letter_inputs = document.querySelectorAll("input[data-word*=" + word_index + "]");
+						var word = word_map[word_index]; // answer key value
+						var partial_word = [];
+
+						// iterate over letter inputs and build an array, in order, of their values
+						for (var j = 0; j < letter_inputs.length; j++) {
+							var letter_index = letter_inputs[j].getAttribute("data-index-" + word_index);
+							partial_word[letter_index] = letter_inputs[j].value;
+						}
+
+						console.log(partial_word.join("") + " - " + word);
+						// check current try against answer
+						if (partial_word.join("") == word) {
+							// if correct, change color and disable inputs
+							for (var j = 0; j < letter_inputs.length; j++) {
+								letter_inputs[j].classList.add('solved');
+								letter_inputs[j].disabled = true;
+							}
+						}
+					}
+	        	});
+	        }
+	    }
+	</script>
+
+</head>
+
+<body>
+
+	<table border="1">
+		<tr>
+			<td>
+				<span class="label">1</span>
+				<input type="text" maxlength="1" data-index-w_1="1" data-index-w_2="1" data-word="w_1 w_2">
+			</td>
+			<td>
+				<input type="text" maxlength="1" data-index-w_2="2" data-word="w_2">
+			</td>
+			<td>
+				<input type="text" maxlength="1" data-index-w_2="3" data-word="w_2">
+			</td>
+			<td>
+				<input type="text" maxlength="1" data-index-w_2="4" data-word="w_2">
+			</td>
+			<td>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<input type="text" maxlength="1" data-index-w_1="2" data-word="w_1">
+			</td>
+			<td>
+			</td>
+			<td>
+			</td>
+			<td>
+			</td>
+			<td>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<span class="label">2</span>
+				<input type="text" maxlength="1" data-index-w_1="3" data-index-w_3="1" data-word="w_1 w_3">
+			</td>
+			<td>
+				<input type="text" maxlength="1" data-index-w_3="2" data-word="w_3">
+			</td>
+			<td>
+				<input type="text" maxlength="1" data-index-w_3="3" data-word="w_3">
+			</td>
+			<td>
+			</td>
+			<td>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<input type="text" maxlength="1" data-index-w_1="4" data-word="w_1">
+			</td>
+			<td>
+			</td>
+			<td>
+			</td>
+			<td>
+			</td>
+			<td>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			</td>
+			<td>
+			</td>
+			<td>
+			</td>
+			<td>
+			</td>
+			<td>
+			</td>
+		</tr>
+	</table>
+
+</body>
+
+</html>
